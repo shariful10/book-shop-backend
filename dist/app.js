@@ -12,7 +12,10 @@ const app = (0, express_1.default)();
 // Parsers
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
-app.use((0, cors_1.default)({ origin: ["http://localhost:5173"], credentials: true }));
+app.use((0, cors_1.default)({
+    origin: ["http://localhost:5173", "https://book-shop-client-xi.vercel.app"],
+    credentials: true,
+}));
 // Application routes
 app.use("/api", routes_1.default);
 app.get("/", (req, res) => {
