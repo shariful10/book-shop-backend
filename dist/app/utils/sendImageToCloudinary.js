@@ -20,7 +20,7 @@ const sendImageToCloudinary = (imageName, path) => {
                 reject(error);
             }
             resolve(result);
-            // Delete a file asynchronously
+            // Delete a file asynchronously to avoid
             fs_1.default.unlink(path, (err) => {
                 if (err) {
                     reject(err);

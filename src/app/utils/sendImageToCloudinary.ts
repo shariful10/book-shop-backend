@@ -23,7 +23,7 @@ export const sendImageToCloudinary = (
         }
         resolve(result as UploadApiResponse);
 
-        // Delete a file asynchronously
+        // Delete a file asynchronously to avoid
         fs.unlink(path, (err) => {
           if (err) {
             reject(err);
