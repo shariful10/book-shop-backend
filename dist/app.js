@@ -13,7 +13,7 @@ const app = (0, express_1.default)();
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 app.use((0, cors_1.default)({
-    origin: ["http://localhost:5173", "https://book-shop-client-xi.vercel.app"],
+    origin: ["*"],
     credentials: true,
 }));
 // Application routes
