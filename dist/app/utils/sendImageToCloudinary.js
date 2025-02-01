@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.upload = exports.sendImageToCloudinary = void 0;
 const cloudinary_1 = require("cloudinary");
+const fs_1 = __importDefault(require("fs"));
 const multer_1 = __importDefault(require("multer"));
 const config_1 = __importDefault(require("../config"));
 cloudinary_1.v2.config({
@@ -20,11 +21,11 @@ const sendImageToCloudinary = (imageName, path) => {
             }
             resolve(result);
             // Delete a file asynchronously
-            // fs.unlink(path, (err) => {
-            //   if (err) {
-            //     reject(err);
-            //   }
-            // });
+            fs_1.default.unlink(path, (err) => {
+                if (err) {
+                    reject(err);
+                }
+            });
         });
     });
 };
