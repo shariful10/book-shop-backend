@@ -36,6 +36,26 @@ const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         },
     });
 }));
+const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.params;
+    const result = yield user_service_1.UserServices.getMeFromDB(email);
+    (0, sendResponse_1.default)(res, {
+        statusCode: httpStatusCode_1.httpStatusCode.OK,
+        message: "User is retrieved successfully",
+        data: result,
+    });
+}));
+const deleteUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.params;
+    const result = yield user_service_1.UserServices.deleteUserFromDB(userId);
+    (0, sendResponse_1.default)(res, {
+        statusCode: httpStatusCode_1.httpStatusCode.OK,
+        message: "User is deleted successfully",
+        data: result,
+    });
+}));
 exports.userController = {
     createUser,
+    getMe,
+    deleteUser,
 };

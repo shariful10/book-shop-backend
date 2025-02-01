@@ -30,6 +30,31 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
+const getMe = catchAsync(async (req, res) => {
+  const { email } = req.params;
+
+  const result = await UserServices.getMeFromDB(email as string);
+
+  sendResponse(res, {
+    statusCode: httpStatusCode.OK,
+    message: "User is retrieved successfully",
+    data: result,
+  });
+});
+
+const deleteUser = catchAsync(async (req, res) => {
+  const { userId } = req.params;
+  const result = await UserServices.deleteUserFromDB(userId);
+
+  sendResponse(res, {
+    statusCode: httpStatusCode.OK,
+    message: "User is deleted successfully",
+    data: result,
+  });
+});
+
 export const userController = {
   createUser,
+  getMe,
+  deleteUser,
 };

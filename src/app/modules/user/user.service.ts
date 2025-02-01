@@ -1,5 +1,7 @@
 import config from "../../config";
+import AppError from "../../errors/AppError";
 import { TUploadedFile } from "../../interface/file";
+import { httpStatusCode } from "../../utils/httpStatusCode";
 import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
@@ -42,6 +44,23 @@ const createUserIntoDB = async (file: TUploadedFile, payload: TUser) => {
   };
 };
 
+const getMeFromDB = async (email: string) => {
+  const result = await User.findOne({ email }).select("-password");
+  return result;
+};
+
+const deleteUserFromDB = async (userId: string) => {
+  const deletedUser = await User.findByIdAndDelete(userId);
+
+  if (!deletedUser) {
+    throw new AppError(httpStatusCode.NOT_FOUND, "User not found");
+  }
+
+  return null;
+};
+
 export const UserServices = {
   createUserIntoDB,
+  getMeFromDB,
+  deleteUserFromDB,
 };
