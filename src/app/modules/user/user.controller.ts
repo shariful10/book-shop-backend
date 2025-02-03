@@ -12,23 +12,31 @@ const createUser = catchAsync(async (req, res) => {
 
   const { refreshToken, accessToken, user } = result;
 
-  res.cookie("refreshToken", refreshToken, {
-    secure: true,
-    httpOnly: true,
-    sameSite: "none",
-    maxAge: 1000 * 60 * 60 * 24 * 365,
-  });
+  res
+    .cookie("refreshToken", refreshToken, {
+      secure: true,
+      httpOnly: true,
+      sameSite: "none",
+      maxAge: 1000 * 60 * 60 * 24 * 365,
+    })
+    .status(httpStatusCode.CREATED)
+    .json({
+      statusCode: httpStatusCode.CREATED,
+      message: "User is created successfully!",
+      data: {
+        user: user,
+        accessToken: accessToken,
+      },
+    });
 
-  console.log("object");
-
-  sendResponse(res, {
-    statusCode: httpStatusCode.CREATED,
-    message: "User is created successfully!",
-    data: {
-      user: user,
-      accessToken: accessToken,
-    },
-  });
+  // sendResponse(res, {
+  //   statusCode: httpStatusCode.CREATED,
+  //   message: "User is created successfully!",
+  //   data: {
+  //     user: user,
+  //     accessToken: accessToken,
+  //   },
+  // });
 });
 
 const getMe = catchAsync(async (req, res) => {
