@@ -1,4 +1,3 @@
-import config from "../../config";
 import { TUploadedFile } from "../../interface/file";
 import catchAsync from "../../utils/catchAsync";
 import { httpStatusCode } from "../../utils/httpStatusCode";
@@ -14,11 +13,13 @@ const createUser = catchAsync(async (req, res) => {
   const { refreshToken, accessToken, user } = result;
 
   res.cookie("refreshToken", refreshToken, {
-    secure: config.NODE_ENV === "production",
+    secure: true,
     httpOnly: true,
     sameSite: "none",
     maxAge: 1000 * 60 * 60 * 24 * 365,
   });
+
+  console.log("object");
 
   sendResponse(res, {
     statusCode: httpStatusCode.CREATED,
