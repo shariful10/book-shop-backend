@@ -6,7 +6,7 @@ import { UserServices } from "./user.service";
 const createUser = catchAsync(async (req, res) => {
   const result = await UserServices.createUserIntoDB(req.body);
 
-  const { refreshToken, accessToken, user } = result;
+  const { accessToken } = result;
 
   // res
   //   .cookie("refreshToken", refreshToken, {
@@ -25,7 +25,7 @@ const createUser = catchAsync(async (req, res) => {
   //     },
   //   });
 
-  res.cookie("refreshToken", refreshToken, {
+  res.cookie("accessToken", accessToken, {
     secure: true,
     httpOnly: true,
     sameSite: true,
@@ -36,7 +36,6 @@ const createUser = catchAsync(async (req, res) => {
     statusCode: httpStatusCode.CREATED,
     message: "User is created successfully!",
     data: {
-      user: user,
       accessToken: accessToken,
     },
   });

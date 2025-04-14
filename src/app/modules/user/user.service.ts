@@ -6,7 +6,7 @@ import { User } from "./user.model";
 import { createToken } from "./user.utils";
 
 const createUserIntoDB = async (payload: TUser) => {
-  const user = await User.create(payload);
+  await User.create(payload);
 
   const jwtPayload = {
     name: payload.name,
@@ -21,16 +21,8 @@ const createUserIntoDB = async (payload: TUser) => {
     { expiresIn: "30d" },
   );
 
-  const refreshToken = createToken(
-    jwtPayload,
-    config.jwtRefreshSecret as string,
-    { expiresIn: "60d" },
-  );
-
   return {
-    user,
     accessToken,
-    refreshToken,
   };
 };
 

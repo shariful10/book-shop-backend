@@ -33,11 +33,9 @@ const loginUser = (payload) => __awaiter(void 0, void 0, void 0, function* () {
         role: user.role,
         profileImg: user.profileImg,
     };
-    const accessToken = (0, user_utils_1.createToken)(jwtPayload, config_1.default.jwtAccessSecret, { expiresIn: "10s" });
-    const refreshToken = (0, user_utils_1.createToken)(jwtPayload, config_1.default.jwtRefreshSecret, { expiresIn: "30d" });
+    const accessToken = (0, user_utils_1.createToken)(jwtPayload, config_1.default.jwtAccessSecret, { expiresIn: "30d" });
     return {
         accessToken,
-        refreshToken,
     };
 });
 const refreshToken = (token) => __awaiter(void 0, void 0, void 0, function* () {

@@ -19,7 +19,7 @@ const httpStatusCode_1 = require("../../utils/httpStatusCode");
 const user_model_1 = require("./user.model");
 const user_utils_1 = require("./user.utils");
 const createUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
-    const user = yield user_model_1.User.create(payload);
+    yield user_model_1.User.create(payload);
     const jwtPayload = {
         name: payload.name,
         email: payload.email,
@@ -27,11 +27,8 @@ const createUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
         profileImg: payload.profileImg,
     };
     const accessToken = (0, user_utils_1.createToken)(jwtPayload, config_1.default.jwtAccessSecret, { expiresIn: "30d" });
-    const refreshToken = (0, user_utils_1.createToken)(jwtPayload, config_1.default.jwtRefreshSecret, { expiresIn: "60d" });
     return {
-        user,
         accessToken,
-        refreshToken,
     };
 });
 const getAllUsersFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
