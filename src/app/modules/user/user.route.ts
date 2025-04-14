@@ -9,14 +9,11 @@ const router = express.Router();
 
 router.post(
   "/",
-  // upload.single("file"),
-  // (req: Request, res: Response, next: NextFunction) => {
-  //   req.body = JSON.parse(req.body.data);
-  //   next();
-  // },
   validateRequest(UserValidations.CreateUserValidationSchema),
   userController.createUser,
 );
+
+router.get("/", userController.getAllUsers);
 
 router.get("/me/:email", userController.getMe);
 

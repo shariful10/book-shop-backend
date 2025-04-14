@@ -34,6 +34,11 @@ const createUserIntoDB = async (payload: TUser) => {
   };
 };
 
+const getAllUsersFromDB = async () => {
+  const result = await User.find().select("-password");
+  return result;
+};
+
 const getMeFromDB = async (email: string) => {
   const result = await User.findOne({ email }).select("-password");
   return result;
@@ -53,4 +58,5 @@ export const UserServices = {
   createUserIntoDB,
   getMeFromDB,
   deleteUserFromDB,
+  getAllUsersFromDB,
 };

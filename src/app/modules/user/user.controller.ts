@@ -42,6 +42,18 @@ const createUser = catchAsync(async (req, res) => {
   });
 });
 
+// Get all books
+const getAllUsers = catchAsync(async (req, res) => {
+  // Retrieve users from the database
+  const result = await UserServices.getAllUsersFromDB();
+
+  sendResponse(res, {
+    statusCode: httpStatusCode.OK,
+    message: "Books are retrieved successfully!",
+    data: result,
+  });
+});
+
 const getMe = catchAsync(async (req, res) => {
   const { email } = req.params;
 
@@ -66,7 +78,8 @@ const deleteUser = catchAsync(async (req, res) => {
 });
 
 export const userController = {
-  createUser,
   getMe,
+  createUser,
   deleteUser,
+  getAllUsers,
 };

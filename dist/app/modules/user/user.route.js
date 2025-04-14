@@ -11,13 +11,8 @@ const user_const_1 = require("./user.const");
 const user_controller_1 = require("./user.controller");
 const user_validation_1 = require("./user.validation");
 const router = express_1.default.Router();
-router.post("/", 
-// upload.single("file"),
-// (req: Request, res: Response, next: NextFunction) => {
-//   req.body = JSON.parse(req.body.data);
-//   next();
-// },
-(0, validateRequest_1.default)(user_validation_1.UserValidations.CreateUserValidationSchema), user_controller_1.userController.createUser);
+router.post("/", (0, validateRequest_1.default)(user_validation_1.UserValidations.CreateUserValidationSchema), user_controller_1.userController.createUser);
+router.get("/", user_controller_1.userController.getAllUsers);
 router.get("/me/:email", user_controller_1.userController.getMe);
 router.delete("/:userId", (0, auth_1.default)(user_const_1.USER_ROLE.superAdmin, user_const_1.USER_ROLE.admin), user_controller_1.userController.deleteUser);
 exports.UserRoutes = router;

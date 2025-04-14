@@ -51,6 +51,16 @@ const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
         },
     });
 }));
+// Get all books
+const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    // Retrieve users from the database
+    const result = yield user_service_1.UserServices.getAllUsersFromDB();
+    (0, sendResponse_1.default)(res, {
+        statusCode: httpStatusCode_1.httpStatusCode.OK,
+        message: "Books are retrieved successfully!",
+        data: result,
+    });
+}));
 const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.params;
     const result = yield user_service_1.UserServices.getMeFromDB(email);
@@ -70,7 +80,8 @@ const deleteUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
     });
 }));
 exports.userController = {
-    createUser,
     getMe,
+    createUser,
     deleteUser,
+    getAllUsers,
 };

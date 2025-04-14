@@ -34,6 +34,10 @@ const createUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
         refreshToken,
     };
 });
+const getAllUsersFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield user_model_1.User.find().select("-password");
+    return result;
+});
 const getMeFromDB = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.findOne({ email }).select("-password");
     return result;
@@ -49,4 +53,5 @@ exports.UserServices = {
     createUserIntoDB,
     getMeFromDB,
     deleteUserFromDB,
+    getAllUsersFromDB,
 };
