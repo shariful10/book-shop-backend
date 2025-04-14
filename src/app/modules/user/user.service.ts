@@ -1,28 +1,18 @@
 import config from "../../config";
 import AppError from "../../errors/AppError";
-import { TUploadedFile } from "../../interface/file";
 import { httpStatusCode } from "../../utils/httpStatusCode";
-import { sendImageToCloudinary } from "../../utils/sendImageToCloudinary";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import { createToken } from "./user.utils";
 
-const createUserIntoDB = async (file: TUploadedFile, payload: TUser) => {
-  if (file) {
-    // Send image to Cloudinary
-    const imageName = `${payload?.email}${payload?.name}`;
-    const path = file?.path;
-
-    const { secure_url } = await sendImageToCloudinary(imageName, path);
-
-    payload.profileImg = secure_url as string;
-  }
-
+const createUserIntoDB = async (payload: TUser) => {
   const user = await User.create(payload);
 
   const jwtPayload = {
+    name: payload.name,
     email: payload.email,
     role: payload.role,
+    profileImg: payload.profileImg,
   };
 
   const accessToken = createToken(

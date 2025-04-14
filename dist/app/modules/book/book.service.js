@@ -12,8 +12,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookServices = void 0;
 const book_model_1 = require("./book.model");
 // create a book
-const createBookIntoDB = (bookData) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield book_model_1.Book.create(bookData);
+const createBookIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield book_model_1.Book.create(payload);
     return result;
 });
 // Get all books

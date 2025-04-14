@@ -1,15 +1,16 @@
 import jwt, { JwtPayload, SignOptions } from "jsonwebtoken";
 
 export const createToken = (
-  jwtPayload: { email: string; role: string },
+  jwtPayload: {
+    name: string;
+    email: string;
+    role: string;
+    profileImg?: string;
+  },
   secret: string,
   expiresIn: SignOptions = {},
 ) => {
-  return jwt.sign(
-    jwtPayload,
-    secret,
-    expiresIn, // Explicitly cast expiresIn to string, number, or undefined
-  );
+  return jwt.sign(jwtPayload, secret, expiresIn);
 };
 
 export const verifyToken = (token: string, secret: string): JwtPayload => {

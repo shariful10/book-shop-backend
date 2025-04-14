@@ -2,8 +2,8 @@ import { TBook } from "./book.interface";
 import { Book } from "./book.model";
 
 // create a book
-const createBookIntoDB = async (bookData: TBook) => {
-  const result = await Book.create(bookData);
+const createBookIntoDB = async (payload: TBook) => {
+  const result = await Book.create(payload);
   return result;
 };
 

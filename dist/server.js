@@ -21,7 +21,7 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         yield mongoose_1.default.connect(config_1.default.databaseUrl);
         (0, DB_1.default)();
         app_1.default.listen(config_1.default.port, () => {
-            console.log(`App is listening on port: ${config_1.default.port}`);
+            console.log(`🚀 App is running on port ${config_1.default.port}`);
         });
     }
     catch (err) {

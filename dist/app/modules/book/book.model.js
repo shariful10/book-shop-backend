@@ -13,7 +13,8 @@ const bookSchema = new mongoose_1.Schema({
     },
     description: { type: String, required: true },
     quantity: { type: Number, required: true },
-    inStock: { type: Boolean, required: true },
+    inStock: { type: Boolean, default: true },
+    thumbnail: { type: String, default: "" },
 }, {
     timestamps: true,
 });

@@ -17,8 +17,10 @@ const loginUser = async (payload: TLoginUser) => {
 
   // Create token and send it to the client
   const jwtPayload = {
+    name: user.name,
     email: user.email,
     role: user.role,
+    profileImg: user.profileImg,
   };
 
   const accessToken = createToken(
@@ -55,8 +57,10 @@ const refreshToken = async (token: string) => {
   }
 
   const jwtPayload = {
+    name: user.name,
     email: user.email,
     role: user.role,
+    profileImg: user.profileImg,
   };
 
   const accessToken = createToken(

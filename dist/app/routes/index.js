@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
-const user_route_1 = require("../modules/user/user.route");
 const auth_route_1 = require("../modules/auth/auth.route");
 const book_route_1 = require("../modules/book/book.route");
 const order_route_1 = require("../modules/order/order.route");
+const user_route_1 = require("../modules/user/user.route");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
     {
@@ -16,7 +16,7 @@ const moduleRoutes = [
         route: user_route_1.UserRoutes,
     },
     {
-        path: "/products",
+        path: "/books",
         route: book_route_1.BookRoutes,
     },
     {

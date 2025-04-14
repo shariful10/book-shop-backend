@@ -16,21 +16,15 @@ exports.UserServices = void 0;
 const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const httpStatusCode_1 = require("../../utils/httpStatusCode");
-const sendImageToCloudinary_1 = require("../../utils/sendImageToCloudinary");
 const user_model_1 = require("./user.model");
 const user_utils_1 = require("./user.utils");
-const createUserIntoDB = (file, payload) => __awaiter(void 0, void 0, void 0, function* () {
-    if (file) {
-        // Send image to Cloudinary
-        const imageName = `${payload === null || payload === void 0 ? void 0 : payload.email}${payload === null || payload === void 0 ? void 0 : payload.name}`;
-        const path = file === null || file === void 0 ? void 0 : file.path;
-        const { secure_url } = yield (0, sendImageToCloudinary_1.sendImageToCloudinary)(imageName, path);
-        payload.profileImg = secure_url;
-    }
+const createUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
     const user = yield user_model_1.User.create(payload);
     const jwtPayload = {
+        name: payload.name,
         email: payload.email,
         role: payload.role,
+        profileImg: payload.profileImg,
     };
     const accessToken = (0, user_utils_1.createToken)(jwtPayload, config_1.default.jwtAccessSecret, { expiresIn: "30d" });
     const refreshToken = (0, user_utils_1.createToken)(jwtPayload, config_1.default.jwtRefreshSecret, { expiresIn: "60d" });
