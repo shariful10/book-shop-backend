@@ -4,7 +4,7 @@ import { TBook } from "./book.interface";
 const bookSchema = new Schema<TBook>(
   {
     title: { type: String, required: true, trim: true },
-    author: { type: String, required: true, trim: true },
+    author: { type: Schema.Types.ObjectId, required: true },
     price: { type: Number, required: true },
     category: {
       type: String,
