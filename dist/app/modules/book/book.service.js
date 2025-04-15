@@ -30,7 +30,7 @@ const getAllBooksFromDB = (searchTerm) => __awaiter(void 0, void 0, void 0, func
         }
         : {};
     // Execute the query to find matching books
-    const result = yield book_model_1.Book.find(query);
+    const result = yield book_model_1.Book.find(query).populate("author");
     return result;
 });
 // Get a specific book

@@ -22,7 +22,7 @@ const getAllBooksFromDB = async (searchTerm: string) => {
     : {};
 
   // Execute the query to find matching books
-  const result = await Book.find(query);
+  const result = await Book.find(query).populate("author");
   return result;
 };
 

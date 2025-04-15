@@ -4,7 +4,7 @@ exports.Book = void 0;
 const mongoose_1 = require("mongoose");
 const bookSchema = new mongoose_1.Schema({
     title: { type: String, required: true, trim: true },
-    author: { type: mongoose_1.Schema.Types.ObjectId, required: true },
+    author: { type: mongoose_1.Schema.Types.ObjectId, required: true, ref: "User" },
     price: { type: Number, required: true },
     category: {
         type: String,
