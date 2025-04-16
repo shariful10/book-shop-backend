@@ -36,7 +36,10 @@ const createBookIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
 const getAllBooksFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
     const { minPrice, maxPrice } = query, pQuery = __rest(query, ["minPrice", "maxPrice"]);
     // Execute the query to find matching books
-    const bookQuery = new QueryBuilder_1.default(book_model_1.Book.find().populate("author"), pQuery)
+    const bookQuery = new QueryBuilder_1.default(book_model_1.Book.find().populate({
+        path: "author",
+        select: "-password",
+    }), pQuery)
         .search(book_const_1.bookSearchableFields)
         .filter()
         .sort()
@@ -52,7 +55,10 @@ const getAllBooksFromDB = (query) => __awaiter(void 0, void 0, void 0, function*
 });
 // Get a specific book
 const getSingleBookFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const book = yield book_model_1.Book.findById(id);
+    const book = yield book_model_1.Book.findById(id).populate({
+        path: "author",
+        select: "-password",
+    });
     // Check the book is exists or not
     if (!book) {
         throw new Error("Book not found");

@@ -14,7 +14,13 @@ const getAllBooksFromDB = async (query: Record<string, unknown>) => {
   const { minPrice, maxPrice, ...pQuery } = query;
 
   // Execute the query to find matching books
-  const bookQuery = new QueryBuilder(Book.find().populate("author"), pQuery)
+  const bookQuery = new QueryBuilder(
+    Book.find().populate({
+      path: "author",
+      select: "-password",
+    }),
+    pQuery,
+  )
     .search(bookSearchableFields)
     .filter()
     .sort()
@@ -33,7 +39,10 @@ const getAllBooksFromDB = async (query: Record<string, unknown>) => {
 
 // Get a specific book
 const getSingleBookFromDB = async (id: string): Promise<TBook | null> => {
-  const book = await Book.findById(id);
+  const book = await Book.findById(id).populate({
+    path: "author",
+    select: "-password",
+  });
 
   // Check the book is exists or not
   if (!book) {
