@@ -1,3 +1,5 @@
+import QueryBuilder from "../../builder/QueryBuilder";
+import { bookSearchableFields } from "./book.const";
 import { TBook } from "./book.interface";
 import { Book } from "./book.model";
 
@@ -8,22 +10,25 @@ const createBookIntoDB = async (payload: TBook) => {
 };
 
 // Get all books
-const getAllBooksFromDB = async (searchTerm: string) => {
-  // Construct the query based on the search term
-  const query = searchTerm
-    ? {
-        $or: [
-          // Search by title, author, or category
-          { title: { $regex: searchTerm, $options: "i" } },
-          { author: { $regex: searchTerm, $options: "i" } },
-          { category: { $regex: searchTerm, $options: "i" } },
-        ],
-      }
-    : {};
+const getAllBooksFromDB = async (query: Record<string, unknown>) => {
+  const { minPrice, maxPrice, ...pQuery } = query;
 
   // Execute the query to find matching books
-  const result = await Book.find(query).populate("author");
-  return result;
+  const bookQuery = new QueryBuilder(Book.find().populate("author"), pQuery)
+    .search(bookSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields()
+    .priceRange(Number(minPrice) || 0, Number(maxPrice) || Infinity);
+
+  const meta = await bookQuery.countTotal();
+  const result = await bookQuery.modelQuery.lean();
+
+  return {
+    meta,
+    result,
+  };
 };
 
 // Get a specific book

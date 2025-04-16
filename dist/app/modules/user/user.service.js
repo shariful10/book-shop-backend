@@ -13,9 +13,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserServices = void 0;
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
 const config_1 = __importDefault(require("../../config"));
 const AppError_1 = __importDefault(require("../../errors/AppError"));
 const httpStatusCode_1 = require("../../utils/httpStatusCode");
+const user_const_1 = require("./user.const");
 const user_model_1 = require("./user.model");
 const user_utils_1 = require("./user.utils");
 const createUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -31,9 +33,19 @@ const createUserIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
         accessToken,
     };
 });
-const getAllUsersFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield user_model_1.User.find().select("-password");
-    return result;
+const getAllUsersFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const userQuery = new QueryBuilder_1.default(user_model_1.User.find().select("-password"), query)
+        .search(user_const_1.userSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields();
+    const meta = yield userQuery.countTotal();
+    const result = yield userQuery.modelQuery;
+    return {
+        meta,
+        result,
+    };
 });
 const getMeFromDB = (email) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_model_1.User.findOne({ email }).select("-password");

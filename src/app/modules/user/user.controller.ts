@@ -8,23 +8,6 @@ const createUser = catchAsync(async (req, res) => {
 
   const { accessToken } = result;
 
-  // res
-  //   .cookie("refreshToken", refreshToken, {
-  //     secure: true,
-  //     httpOnly: true,
-  //     sameSite: "none",
-  //     maxAge: 1000 * 60 * 60 * 24 * 365,
-  //   })
-  //   .status(httpStatusCode.CREATED)
-  //   .json({
-  //     statusCode: httpStatusCode.CREATED,
-  //     message: "User is created successfully!",
-  //     data: {
-  //       user: user,
-  //       accessToken: accessToken,
-  //     },
-  //   });
-
   res.cookie("accessToken", accessToken, {
     secure: true,
     httpOnly: true,
@@ -44,12 +27,13 @@ const createUser = catchAsync(async (req, res) => {
 // Get all books
 const getAllUsers = catchAsync(async (req, res) => {
   // Retrieve users from the database
-  const result = await UserServices.getAllUsersFromDB();
+  const result = await UserServices.getAllUsersFromDB(req.query);
 
   sendResponse(res, {
     statusCode: httpStatusCode.OK,
     message: "Books are retrieved successfully!",
-    data: result,
+    meta: result.meta,
+    data: result.result,
   });
 });
 

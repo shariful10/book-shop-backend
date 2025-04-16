@@ -8,8 +8,24 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.BookServices = void 0;
+const QueryBuilder_1 = __importDefault(require("../../builder/QueryBuilder"));
+const book_const_1 = require("./book.const");
 const book_model_1 = require("./book.model");
 // create a book
 const createBookIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
@@ -17,21 +33,22 @@ const createBookIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
     return result;
 });
 // Get all books
-const getAllBooksFromDB = (searchTerm) => __awaiter(void 0, void 0, void 0, function* () {
-    // Construct the query based on the search term
-    const query = searchTerm
-        ? {
-            $or: [
-                // Search by title, author, or category
-                { title: { $regex: searchTerm, $options: "i" } },
-                { author: { $regex: searchTerm, $options: "i" } },
-                { category: { $regex: searchTerm, $options: "i" } },
-            ],
-        }
-        : {};
+const getAllBooksFromDB = (query) => __awaiter(void 0, void 0, void 0, function* () {
+    const { minPrice, maxPrice } = query, pQuery = __rest(query, ["minPrice", "maxPrice"]);
     // Execute the query to find matching books
-    const result = yield book_model_1.Book.find(query).populate("author");
-    return result;
+    const bookQuery = new QueryBuilder_1.default(book_model_1.Book.find().populate("author"), pQuery)
+        .search(book_const_1.bookSearchableFields)
+        .filter()
+        .sort()
+        .paginate()
+        .fields()
+        .priceRange(Number(minPrice) || 0, Number(maxPrice) || Infinity);
+    const meta = yield bookQuery.countTotal();
+    const result = yield bookQuery.modelQuery.lean();
+    return {
+        meta,
+        result,
+    };
 });
 // Get a specific book
 const getSingleBookFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {

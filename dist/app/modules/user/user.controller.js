@@ -20,22 +20,6 @@ const user_service_1 = require("./user.service");
 const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield user_service_1.UserServices.createUserIntoDB(req.body);
     const { accessToken } = result;
-    // res
-    //   .cookie("refreshToken", refreshToken, {
-    //     secure: true,
-    //     httpOnly: true,
-    //     sameSite: "none",
-    //     maxAge: 1000 * 60 * 60 * 24 * 365,
-    //   })
-    //   .status(httpStatusCode.CREATED)
-    //   .json({
-    //     statusCode: httpStatusCode.CREATED,
-    //     message: "User is created successfully!",
-    //     data: {
-    //       user: user,
-    //       accessToken: accessToken,
-    //     },
-    //   });
     res.cookie("accessToken", accessToken, {
         secure: true,
         httpOnly: true,
@@ -53,11 +37,12 @@ const createUser = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, voi
 // Get all books
 const getAllUsers = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // Retrieve users from the database
-    const result = yield user_service_1.UserServices.getAllUsersFromDB();
+    const result = yield user_service_1.UserServices.getAllUsersFromDB(req.query);
     (0, sendResponse_1.default)(res, {
         statusCode: httpStatusCode_1.httpStatusCode.OK,
         message: "Books are retrieved successfully!",
-        data: result,
+        meta: result.meta,
+        data: result.result,
     });
 }));
 const getMe = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {

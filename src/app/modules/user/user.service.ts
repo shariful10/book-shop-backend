@@ -1,6 +1,8 @@
+import QueryBuilder from "../../builder/QueryBuilder";
 import config from "../../config";
 import AppError from "../../errors/AppError";
 import { httpStatusCode } from "../../utils/httpStatusCode";
+import { userSearchableFields } from "./user.const";
 import { TUser } from "./user.interface";
 import { User } from "./user.model";
 import { createToken } from "./user.utils";
@@ -26,9 +28,20 @@ const createUserIntoDB = async (payload: TUser) => {
   };
 };
 
-const getAllUsersFromDB = async () => {
-  const result = await User.find().select("-password");
-  return result;
+const getAllUsersFromDB = async (query: Record<string, unknown>) => {
+  const userQuery = new QueryBuilder(User.find().select("-password"), query)
+    .search(userSearchableFields)
+    .filter()
+    .sort()
+    .paginate()
+    .fields();
+  const meta = await userQuery.countTotal();
+  const result = await userQuery.modelQuery;
+
+  return {
+    meta,
+    result,
+  };
 };
 
 const getMeFromDB = async (email: string) => {
