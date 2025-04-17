@@ -59,13 +59,11 @@ const updateBookValidationSchema = zod_1.z.object({
             .string({
             invalid_type_error: "Title must be a string",
         })
-            .min(1, "Title is required.")
             .optional(),
         author: zod_1.z
             .string({
             invalid_type_error: "Author must be a string",
         })
-            .min(1, "Author is required.")
             .optional(),
         price: zod_1.z
             .number({
@@ -78,7 +76,6 @@ const updateBookValidationSchema = zod_1.z.object({
             .string({
             invalid_type_error: "Description must be a string",
         })
-            .min(1, "Description is required.")
             .optional(),
         quantity: zod_1.z
             .number({
