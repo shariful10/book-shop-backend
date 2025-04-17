@@ -72,9 +72,7 @@ const updateBookValidationSchema = zod_1.z.object({
             .number({
             invalid_type_error: "Price must be a number",
         })
-            .positive("Price must be a positive number.")
-            .optional()
-            .default(0),
+            .optional(),
         category: exports.updateCategoryValidationSchema,
         description: zod_1.z
             .string({
