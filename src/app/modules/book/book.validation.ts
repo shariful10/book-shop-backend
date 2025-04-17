@@ -9,6 +9,10 @@ export const categoryValidationSchema = z.enum([
   "Religious",
 ]);
 
+export const updateCategoryValidationSchema = z
+  .enum(["Fiction", "Science", "SelfDevelopment", "Poetry", "Religious"])
+  .optional();
+
 // Book schema for zod validation
 const createBookValidationSchema = z.object({
   body: z.object({
@@ -70,8 +74,9 @@ const updateBookValidationSchema = z.object({
         invalid_type_error: "Price must be a number",
       })
       .positive("Price must be a positive number.")
-      .optional(),
-    category: categoryValidationSchema.optional(),
+      .optional()
+      .default(0),
+    category: updateCategoryValidationSchema,
     description: z
       .string({
         invalid_type_error: "Description must be a string",

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.BookValidations = exports.categoryValidationSchema = void 0;
+exports.BookValidations = exports.updateCategoryValidationSchema = exports.categoryValidationSchema = void 0;
 const zod_1 = require("zod");
 // Category schema for zod validation
 exports.categoryValidationSchema = zod_1.z.enum([
@@ -10,6 +10,9 @@ exports.categoryValidationSchema = zod_1.z.enum([
     "Poetry",
     "Religious",
 ]);
+exports.updateCategoryValidationSchema = zod_1.z
+    .enum(["Fiction", "Science", "SelfDevelopment", "Poetry", "Religious"])
+    .optional();
 // Book schema for zod validation
 const createBookValidationSchema = zod_1.z.object({
     body: zod_1.z.object({
@@ -70,8 +73,9 @@ const updateBookValidationSchema = zod_1.z.object({
             invalid_type_error: "Price must be a number",
         })
             .positive("Price must be a positive number.")
-            .optional(),
-        category: exports.categoryValidationSchema.optional(),
+            .optional()
+            .default(0),
+        category: exports.updateCategoryValidationSchema,
         description: zod_1.z
             .string({
             invalid_type_error: "Description must be a string",
