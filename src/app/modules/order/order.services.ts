@@ -9,27 +9,25 @@ const createOrderIntoDB = async (orderData: TOrder): Promise<TOrder> => {
   session.startTransaction();
 
   try {
-    // Find the book by ID within the session
-    const book = await Book.findById(orderData.product).session(session);
+    if (orderData.products) {
+      for (const product of orderData.products) {
+        const book = await Book.findById(product.product).session(session);
 
-    // Find the book exists or not
-    if (!book) {
-      throw new Error("Book not found");
+        // Check the book is in stock or not
+        if (book && book.quantity < product.quantity) {
+          throw new Error("Insufficient stock for product: " + book.title);
+        }
+
+        // Update the stock and quantity
+        if (book) {
+          book.quantity -= product.quantity;
+          if (book.quantity === 0) {
+            book.inStock = false;
+          }
+          await book.save({ session });
+        }
+      }
     }
-
-    // Check the book is in stock or not
-    if (book.quantity < orderData.quantity) {
-      throw new Error("Insufficient stock");
-    }
-
-    // Update the stock and quantity
-    book.quantity -= orderData.quantity;
-    if (book.quantity === 0) {
-      book.inStock = false;
-    }
-
-    // Save the updated book within the session
-    await book.save({ session });
 
     // Create a new order with the provided data
     const order = new Order(orderData);
@@ -42,10 +40,10 @@ const createOrderIntoDB = async (orderData: TOrder): Promise<TOrder> => {
     session.endSession();
 
     return result;
-  } catch (error) {
+  } catch (err) {
     await session.abortTransaction();
     session.endSession();
-    throw error;
+    throw err;
   }
 };
 

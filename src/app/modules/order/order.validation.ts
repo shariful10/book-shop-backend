@@ -1,28 +1,20 @@
-import { Types } from "mongoose";
 import { z } from "zod";
 
+const productValidationSchema = z.object({
+  product: z.string(),
+  quantity: z.number().int().min(1, "Quantity must be at least 1"),
+  totalPrice: z.number().min(0, "Total price must be non-negative"),
+});
+
 export const orderValidationSchema = z.object({
-  email: z
-    .string({
-      required_error: "Email is required",
-      invalid_type_error: "Email must be a string",
-    })
-    .email("Email must be in email format")
-    .trim(),
-  product: z.custom<Types.ObjectId>((val) => Types.ObjectId.isValid(val), {
-    message: "Invalid ObjectId",
+  body: z.object({
+    user: z.string(),
+    products: z.array(productValidationSchema),
+    totalAmount: z
+      .number({
+        required_error: "Total price is required",
+        invalid_type_error: "Total price must be a number",
+      })
+      .min(0, "Total price must be non-negative"),
   }),
-  quantity: z
-    .number({
-      required_error: "Quantity is required",
-      invalid_type_error: "Quantity must be a number",
-    })
-    .int()
-    .min(1, "Quantity must be at least 1"),
-  totalPrice: z
-    .number({
-      required_error: "Total price is required",
-      invalid_type_error: "Total price must be a number",
-    })
-    .min(0, "Total price must be non-negative"),
 });

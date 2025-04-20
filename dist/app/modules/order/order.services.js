@@ -18,23 +18,23 @@ const createOrderIntoDB = (orderData) => __awaiter(void 0, void 0, void 0, funct
     const session = yield order_model_1.Order.startSession();
     session.startTransaction();
     try {
-        // Find the book by ID within the session
-        const book = yield book_model_1.Book.findById(orderData.product).session(session);
-        // Find the book exists or not
-        if (!book) {
-            throw new Error("Book not found");
+        if (orderData.products) {
+            for (const product of orderData.products) {
+                const book = yield book_model_1.Book.findById(product.product).session(session);
+                // Check the book is in stock or not
+                if (book && book.quantity < product.quantity) {
+                    throw new Error("Insufficient stock for product: " + book.title);
+                }
+                // Update the stock and quantity
+                if (book) {
+                    book.quantity -= product.quantity;
+                    if (book.quantity === 0) {
+                        book.inStock = false;
+                    }
+                    yield book.save({ session });
+                }
+            }
         }
-        // Check the book is in stock or not
-        if (book.quantity < orderData.quantity) {
-            throw new Error("Insufficient stock");
-        }
-        // Update the stock and quantity
-        book.quantity -= orderData.quantity;
-        if (book.quantity === 0) {
-            book.inStock = false;
-        }
-        // Save the updated book within the session
-        yield book.save({ session });
         // Create a new order with the provided data
         const order = new order_model_1.Order(orderData);
         // Save the order within the session
@@ -44,10 +44,10 @@ const createOrderIntoDB = (orderData) => __awaiter(void 0, void 0, void 0, funct
         session.endSession();
         return result;
     }
-    catch (error) {
+    catch (err) {
         yield session.abortTransaction();
         session.endSession();
-        throw error;
+        throw err;
     }
 });
 // Calculate total revenue
