@@ -11,7 +11,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "*",
+    origin: "https://books-shop-client.vercel.app",
     credentials: true,
   }),
 );
